@@ -21,13 +21,14 @@ WIDTH = 900
 HEIGHT = 900
 
 running = True
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH + 100, HEIGHT + 100))
+screen.fill([0, 0, 0])
 imageFile = "Board.jpg"
 im1 = Image.open(imageFile)
 im2 = im1.resize((WIDTH, HEIGHT))
 im2.save("Board.jpg")
 background_image = pygame.image.load("Board.jpg").convert()
-screen.blit(background_image, [0, 0])
+screen.blit(background_image, [50, 50])
 
 while running:
  pygame.display.flip()
