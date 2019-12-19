@@ -10,12 +10,13 @@ BLACK = 1
 WHITE = 2
 blackColor = [0,0,0]
 class CarromPiece(pygame.sprite.Sprite):
-        def __init__(self, x_coord, y_coord, speed, pieceType):
+        def __init__(self, x_coord, y_coord, speed, pieceType, point_val):
             pygame.sprite.Sprite.__init__(self)
             screen = pygame.display.get_surface()
             self.area = screen.get_rect()
             self.x_coord = x_coord
             self.y_coord = y_coord
+            self.point_val = point_val
             if(pieceType == QUEEN):
                 self.image = pygame.image.load("Queen_Piece.png").convert()
                 self.rect = self.image.get_rect()
@@ -32,5 +33,18 @@ class CarromPiece(pygame.sprite.Sprite):
             self.pieceType = pieceType
             self.type = "piece"
             screen.blit(self.image, [self.x_coord, self.y_coord])
+        def getCenter(self):
+            return self.x_coord, self.y_coord
+        def getPieceType(self):
+            return self.typePiece
+        def update(self, x_coord, y_coord):
+            self.x_coord = x_coord
+            self.y_coord = y_coord
+            return x_coord, y_coord
+        def setSpeed(self, speed):
+            self.speed = speed
+            return speed
+        def getSpeed(self):
+            return self.speed
 
 

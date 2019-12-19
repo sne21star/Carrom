@@ -17,13 +17,75 @@ CENTERR = 423
 LEFTTOP = 50
 numPIECE = 9
 sizePiece = 150
+POINTSB = 10
+POINTSW = 20
+POINTSQ = 50
+def blackPiecePos():
+    i = 0
+    k = 500
+    while i < numPIECE:
+        xCoord = 0
+        yCoord = 0
+        pieces = pygame.sprite.RenderUpdates()
+        pieces.add(CarromPiece(xCoord, yCoord, 0, BLACK, POINTSB))
+        i += 1
+        k += 20
+    return 0
+def whitePiecePos():
+    i = 0
+    k = 0
+    l = 0
+    j = 27
+    m = 0
+    z = 0
+    while i < numPIECE:
+        xCoord = CENTERR
+        yCoord = CENTERL
+        if 0 <= i < 2:
+            xCoord = CENTERR + 32 + k
+            yCoord = CENTERL + 27 + k
+            k += 25
+        if 2 <= i < 4:
+            xCoord = CENTERR - l - 32
+            yCoord = CENTERL + l + 27
+            l += 25
+        if 4 <= i < 6:
+            xCoord = CENTERR
+            yCoord = CENTERL - 36 - j
+            j -= 27
+        # CENTERL = 452
+        # CENTERR = 423
+        if 6 <= i < 9:
+            q = 1
+            zeroX = 1
+            zeroY = 1
+            if (i % 7 == 0):
+                q = -1
+            if (i % 8 == 0):
+                zeroX = 0
+                zeroY = 100
+            xCoord = CENTERR + (+70) * q * zeroX
+            yCoord = CENTERL + (-20) + zeroY
+        pieces = pygame.sprite.RenderUpdates()
+        pieces.add(CarromPiece(xCoord, yCoord, 0, WHITE, POINTSW))
+        i += 1
+    return 0
+#function will give menu
+def start():
+    screen = pygame.display.set_mode((WIDTH + 100, HEIGHT + 100))
+    pygame.display.set_caption('Carrom by Sneha')
+    screen.fill([0, 0, 0])
+    return screen
+
+#function will give instructions and ask for either type game 1 or type game 2
+def instructions():
+    return 0
+
 def main():
     #Initialize
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH + 100, HEIGHT + 100))
-    pygame.display.set_caption('Carrom')
-    screen.fill([0, 0, 0])
-
+    screen = start()
+    pygame.display.flip()
     #re-shape Board Image
     imageFile = "Board.png"
     im1 = Image.open(imageFile)
@@ -54,30 +116,17 @@ def main():
 
     #Create Queen Piece
     pieces = pygame.sprite.RenderUpdates()
-    pieces.add(CarromPiece(CENTERR,CENTERL,0,QUEEN))
-    piece_selected = pygame.sprite.GroupSingle()
+    pieces.add(CarromPiece(CENTERR,CENTERL,0,QUEEN, POINTSQ))
 
     #Create White PieceS
-    i = 0
-    k = 0
-    while i < numPIECE:
-        pieces = pygame.sprite.RenderUpdates()
-        pieces.add(CarromPiece(CENTERR+45+k, CENTERL, 0, WHITE))
-        piece_selected = pygame.sprite.GroupSingle()
-        i += 1
-        k += 20
+    whitePiecePos()
 
     # Create Black PieceS
-    i = 0
-    k = 500
-    while i < numPIECE:
-        pieces = pygame.sprite.RenderUpdates()
-        pieces.add(CarromPiece(k, k, 0, BLACK))
-        piece_selected = pygame.sprite.GroupSingle()
-        i += 1
-        k += 20
+    blackPiecePos()
 
     pygame.display.flip()
+    #event Loop
+    piece_selected = pygame.sprite.GroupSingle()
 
     #Game Loop
     while RUNNING:
@@ -86,12 +135,13 @@ def main():
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
             running = False
+            break
             pygame.quit()
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
             print ("You pressed the left mouse button at (%d, %d)" % event.pos)
         elif event.type == pygame.MOUSEBUTTONUP and event.button == LEFT:
             print ("You released the left mouse button at (%d, %d)" % event.pos)
-
     pygame.quit()
+    exit()
 
 if __name__ == '__main__': main()
