@@ -12,21 +12,46 @@ RUNNING = True
 QUEEN = 0
 BLACK = 1
 WHITE = 2
-CENTERL = 452
-CENTERR = 423
+CENTERL = 377
+CENTERR = 384
 LEFTTOP = 50
 numPIECE = 9
-sizePiece = 150
+sizePiece = 250
 POINTSB = 10
 POINTSW = 20
 POINTSQ = 50
 def blackPiecePos():
     i = 0
     k = 500
+    j = 45
+    q = 0
+    z = 1
+    d = 0
     while i < numPIECE:
         xCoord = 0
         yCoord = 0
         pieces = pygame.sprite.RenderUpdates()
+        if(0 <= i < 3):
+            if(i%2 == 0):
+                z = -1
+            xCoord = CENTERR + q*(z)
+            yCoord = CENTERL + j
+            q = 34
+            j = 70
+            z = 1
+        if (3 <= i < 5):
+            xCoord = CENTERR +40 + d
+            yCoord = CENTERL - j
+            j -= 70
+            d += 40
+        if (i==5):
+            xCoord = CENTERR + 35
+            yCoord = CENTERL - 25
+        if (6 <= i < 9):
+            if (i % 2 == 0):
+                z = -1
+            xCoord = CENTERR + q * (z)
+            yCoord = CENTERL + j
         pieces.add(CarromPiece(xCoord, yCoord, 0, BLACK, POINTSB))
         i += 1
         k += 20
@@ -42,17 +67,17 @@ def whitePiecePos():
         xCoord = CENTERR
         yCoord = CENTERL
         if 0 <= i < 2:
-            xCoord = CENTERR + 32 + k
-            yCoord = CENTERL + 27 + k
-            k += 25
+            xCoord = CENTERR + 40 + k
+            yCoord = CENTERL + 20 + k
+            k += 30
         if 2 <= i < 4:
-            xCoord = CENTERR - l - 32
-            yCoord = CENTERL + l + 27
-            l += 25
+            xCoord = CENTERR - l - 40
+            yCoord = CENTERL + l + 20
+            l += 30
         if 4 <= i < 6:
             xCoord = CENTERR
-            yCoord = CENTERL - 36 - j
-            j -= 27
+            yCoord = CENTERL - 65 - j
+            j -= 45
         # CENTERL = 452
         # CENTERR = 423
         if 6 <= i < 9:
@@ -63,9 +88,9 @@ def whitePiecePos():
                 q = -1
             if (i % 8 == 0):
                 zeroX = 0
-                zeroY = 100
-            xCoord = CENTERR + (+70) * q * zeroX
-            yCoord = CENTERL + (-20) + zeroY
+                zeroY = 130
+            xCoord = CENTERR + (+78) * q * zeroX
+            yCoord = CENTERL + (-40) + zeroY
         pieces = pygame.sprite.RenderUpdates()
         pieces.add(CarromPiece(xCoord, yCoord, 0, WHITE, POINTSW))
         i += 1
@@ -93,22 +118,22 @@ def main():
     im2.save("Board.png")
 
     #re-shape Queen Image
-    imageFile = "Queen_Piece_original.png"
+    imageFile = "queenImage.png"
     im1 = Image.open(imageFile)
     im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("Queen_Piece.png")
+    im2.save("queenImage.png")
 
     # re-shape Black piece Image
-    imageFile = "Black_Piece_original.png"
+    imageFile = "blackPieceImage.png"
     im1 = Image.open(imageFile)
     im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("Black_Piece.png")
+    im2.save("blackPieceImage.png")
 
     # re-shape White Image
-    imageFile = "White_Piece_original.png"
+    imageFile = "whitepiece.png"
     im1 = Image.open(imageFile)
     im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("White_Piece.png")
+    im2.save("whitepiece.png")
 
     #Display Board
     background_image = pygame.image.load("Board.png").convert_alpha()

@@ -18,15 +18,15 @@ class CarromPiece(pygame.sprite.Sprite):
             self.y_coord = y_coord
             self.point_val = point_val
             if(pieceType == QUEEN):
-                self.image = pygame.image.load("Queen_Piece.png").convert()
+                self.image = pygame.image.load("queenImage.png").convert()
                 self.rect = self.image.get_rect()
                 self.image.set_colorkey(blackColor)
             if (pieceType == BLACK):
-                self.image = pygame.image.load('Black_Piece.png').convert()
+                self.image = pygame.image.load('blackPieceImage.png').convert()
                 self.rect = self.image.get_rect()
                 self.image.set_colorkey(blackColor)
             if (pieceType == WHITE):
-                self.image = pygame.image.load('White_Piece.png').convert()
+                self.image = pygame.image.load('whitepiece.png').convert()
                 self.rect = self.image.get_rect()
                 self.image.set_colorkey(blackColor)
             self.speed = speed
