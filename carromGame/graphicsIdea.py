@@ -2,8 +2,10 @@ from carromGame.graphics import *
 import tkinter as tk
 from PIL import ImageTk, Image
 from pygame.locals import *
-import pygame,sys
+import pygame, sys
+import time
 from carromGame.carromPiece import *
+from carromGame.player import *
 #Constants
 LEFT = 1
 WIDTH = 900
@@ -17,9 +19,21 @@ CENTERR = 384
 LEFTTOP = 50
 numPIECE = 9
 sizePiece = 250
+sizeStriker = 60
 POINTSB = 10
 POINTSW = 20
 POINTSQ = 50
+TEXTCOLOR = [0,0,255]
+BLACKCOLOR = [0,0,0]
+
+def text_objects(fontSize, txtColor, backColor, rotAngle, x ,y, txt):
+    font = pygame.font.Font('freesansbold.ttf', fontSize)
+    text = font.render(txt, True, txtColor, backColor)
+    text = pygame.transform.rotate(text, rotAngle)
+    textRect = text.get_rect()
+    textRect.center = (x, y)
+    return text, textRect
+
 def blackPiecePos():
     i = 0
     k = 500
@@ -47,11 +61,16 @@ def blackPiecePos():
         if (i==5):
             xCoord = CENTERR + 35
             yCoord = CENTERL - 25
-        if (6 <= i < 9):
-            if (i % 2 == 0):
-                z = -1
-            xCoord = CENTERR + q * (z)
-            yCoord = CENTERL + j
+        if (i == 6):
+            q+=45
+            xCoord = CENTERR - q
+            yCoord = CENTERL + 10
+        if (i == 7):
+            xCoord = CENTERR - 43
+            yCoord = CENTERL - 70
+        if (i == 8):
+            xCoord = CENTERR - 40
+            yCoord = CENTERL - 25
         pieces.add(CarromPiece(xCoord, yCoord, 0, BLACK, POINTSB))
         i += 1
         k += 20
@@ -106,39 +125,37 @@ def start():
 def instructions():
     return 0
 
+def resizePicture(picName,sizeW, sizeH):
+    imageFile = picName
+    im1 = Image.open(imageFile)
+    im2 = im1.resize((sizeW, sizeH))
+    im2.save(picName)
+
 def main():
     #Initialize
     pygame.init()
     screen = start()
     pygame.display.flip()
     #re-shape Board Image
-    imageFile = "Board.png"
-    im1 = Image.open(imageFile)
-    im2 = im1.resize((WIDTH, HEIGHT))
-    im2.save("Board.png")
+    resizePicture("Board.png", WIDTH, HEIGHT)
+    resizePicture("queenImage.png", sizePiece, sizePiece)
+    resizePicture("blackPieceImage.png", sizePiece, sizePiece)
+    resizePicture("whitepiece.png", sizePiece, sizePiece)
+    resizePicture("striker1.png", sizeStriker, sizeStriker)
 
-    #re-shape Queen Image
-    imageFile = "queenImage.png"
-    im1 = Image.open(imageFile)
-    im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("queenImage.png")
-
-    # re-shape Black piece Image
-    imageFile = "blackPieceImage.png"
-    im1 = Image.open(imageFile)
-    im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("blackPieceImage.png")
-
-    # re-shape White Image
-    imageFile = "whitepiece.png"
-    im1 = Image.open(imageFile)
-    im2 = im1.resize((sizePiece, sizePiece))
-    im2.save("whitepiece.png")
+    #Text Message
+    [text, textRect] = text_objects(32, TEXTCOLOR, BLACKCOLOR, 270, 975, 875, 'Player 1')
+    [text2, textRect2] = text_objects(32, [255,20,147], BLACKCOLOR, 90, 20, 115, 'Player 2')
+    [text3, textRect3] = text_objects(32, [128, 0, 128], BLACKCOLOR, 0, 120, 975, 'Player 3')
+    [text4, textRect4] = text_objects(32, [255,255,255], BLACKCOLOR, 0, 885, 25, 'Player 4')
 
     #Display Board
     background_image = pygame.image.load("Board.png").convert_alpha()
     screen.blit(background_image, [LEFTTOP, LEFTTOP])
-
+    screen.blit(text, textRect)
+    screen.blit(text2, textRect2)
+    screen.blit(text3, textRect3)
+    screen.blit(text4, textRect4)
     #Create Queen Piece
     pieces = pygame.sprite.RenderUpdates()
     pieces.add(CarromPiece(CENTERR,CENTERL,0,QUEEN, POINTSQ))
@@ -146,13 +163,23 @@ def main():
     #Create White PieceS
     whitePiecePos()
 
-    # Create Black PieceS
+    #Create Black PieceS
     blackPiecePos()
 
+    #Create Player / Striker
+    player1 = Player("striker1.png")
+    player1.rect.x = 753
+    player1.rect.y = 475
+    player_list = pygame.sprite.RenderUpdates()
+    player_list.add(player1)
+    player_list.draw(screen)
     pygame.display.flip()
+
     #event Loop
     piece_selected = pygame.sprite.GroupSingle()
 
+    #Clock of Game
+    clock = pygame.time.Clock()
     #Game Loop
     while RUNNING:
         pieces.clear(screen, background_image)
