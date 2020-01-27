@@ -1,11 +1,6 @@
-from carromGame.graphics import *
-import tkinter as tk
-from PIL import ImageTk, Image
-from pygame.locals import *
-import pygame, sys
-import time
-from carromGame.carromPiece import *
-from carromGame.player import *
+from graphics import *
+from carromPiece import *
+from player import *
 #Constants
 LEFT = 1
 WIDTH = 900
